@@ -31,7 +31,9 @@
               <span>层级管理</span>
             </span>
         </template>
-        <a-menu-item key="3">层级列表</a-menu-item>
+        <a-menu-item key="3">
+          <router-link to="/hierarchy">层级列表</router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="sub4">
         <template #title>
@@ -40,7 +42,9 @@
               <span>用户管理</span>
             </span>
         </template>
-        <a-menu-item key="4">用户列表</a-menu-item>
+        <a-menu-item key="4">
+          <router-link to="/user">用户列表</router-link>
+        </a-menu-item>
       </a-sub-menu>
     </a-menu>
   </a-layout-sider>
