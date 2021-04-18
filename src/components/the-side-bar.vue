@@ -20,7 +20,9 @@
               <span>权限管理</span>
             </span>
         </template>
-        <a-menu-item key="2">权限列表</a-menu-item>
+        <a-menu-item key="2">
+          <router-link to="/permission">权限列表</router-link>
+        </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="sub3">
         <template #title>

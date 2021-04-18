@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/home.vue'
 import Role from '../views/role.vue'
+import Permission from '../views/permission.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/role',
     name: 'role',
     component: Role
+  },
+  {
+    path: '/permission',
+    name: 'permission',
+    component: Permission
   },
   {
     path: '/about',

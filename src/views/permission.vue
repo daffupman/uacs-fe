@@ -1,7 +1,16 @@
 <template>
-  <a-form layout="inline" :model="roleSearchForm" @finish="handleFinish" @finishFailed="handleFinishFailed">
-    <a-form-item label="角色名称">
-      <a-input v-model:value="roleSearchForm.name"/>
+  <a-form layout="inline" :model="permissionSearchForm" @finish="handleFinish" @finishFailed="handleFinishFailed">
+    <a-form-item label="权限标识">
+      <a-input v-model:value="permissionSearchForm.code"/>
+    </a-form-item>
+    <a-form-item label="权限描述">
+      <a-input v-model:value="permissionSearchForm.desc"/>
+    </a-form-item>
+    <a-form-item label="权限类型">
+      <a-input v-model:value="permissionSearchForm.type"/>
+    </a-form-item>
+    <a-form-item label="状态">
+      <a-input v-model:value="permissionSearchForm.state"/>
     </a-form-item>
     <a-form-item>
       <a-button type="primary">
@@ -9,7 +18,7 @@
       </a-button>
     </a-form-item>
     <a-form-item style="float: right">
-      <a-button type="default" size="large">新增角色</a-button>
+      <a-button type="default" size="large">新增权限</a-button>
     </a-form-item>
   </a-form>
   <br/>
@@ -31,24 +40,37 @@
   import { SearchOutlined } from '@ant-design/icons-vue';
 
   interface FormState {
-    name: string;
+    code: string;
+    desc: string;
+    type: string;
+    state: string;
   }
 
   const columns = [
     {
-      title: '角色名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'code',
+      key: 'code',
+      title: '权限标识',
     },
     {
-      title: '角色类型',
+      dataIndex: 'desc',
+      key: 'desc',
+      title: '权限描述',
+    },
+    {
       dataIndex: 'type',
       key: 'type',
+      title: '权限类型',
     },
     {
-      title: '创建人',
+      dataIndex: 'state',
+      key: 'state',
+      title: '状态',
+    },
+    {
       dataIndex: 'createBy',
       key: 'createBy',
+      title: '创建人',
     },
     {
       title: '操作',
@@ -60,27 +82,43 @@
   const data = [
     {
       id: '1',
-      name: '超级管理员',
-      type: '管理员角色',
-      createBy: 'zhengjin.wang'
+      code: 'user:insert',
+      desc: '新增用户',
+      type: '功能权限',
+      state: '正常',
+      createBy: 'zhengjin.wang',
     },
     {
       id: '2',
-      name: '小组负责人',
-      type: '普通角色',
-      createBy: 'zhengjin.wang'
+      code: 'user:update',
+      desc: '修改用户',
+      type: '功能权限',
+      state: '正常',
+      createBy: 'zhengjin.wang',
+    },
+    {
+      id: '3',
+      code: 'user:select',
+      desc: '查询用户',
+      type: '功能权限',
+      state: '正常',
+      createBy: 'zhengjin.wang',
     },
   ];
 
   export default defineComponent({
-    name: "role",
+    name: "permission",
     setup() {
 
       const pageSize = ref(10);
       const current = ref(1);
 
-      const roleSearchForm: UnwrapRef<FormState> = reactive({
-        name: ''
+      const permissionSearchForm: UnwrapRef<FormState> = reactive({
+        code: '',
+        desc: '',
+        type: '',
+        state: '',
+        createBy: ''
       });
 
       const pagination = {
@@ -93,7 +131,7 @@
       };
 
       const handleFinish = (values: FormState) => {
-        console.log(values, roleSearchForm);
+        console.log(values, permissionSearchForm);
       };
       const handleFinishFailed = (errors: ValidateErrorEntity<FormState>) => {
         console.log(errors);
@@ -107,7 +145,7 @@
         data,
         columns,
 
-        roleSearchForm,
+        permissionSearchForm,
         pageSize,
         current,
         pagination,
