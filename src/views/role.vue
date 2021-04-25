@@ -9,29 +9,44 @@
       </a-button>
     </a-form-item>
     <a-form-item style="float: right">
-      <a-button type="default" size="large">新增角色</a-button>
+      <a-button type="default" size="large" @click="saveOrUpdate()">新增角色</a-button>
     </a-form-item>
   </a-form>
   <br/>
   <a-table :columns="columns" :data-source="data" class="ant-table-striped" size="middle" :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)" bordered :pagination="pagination">
     <template #action="{ record }">
       <span>
-        <a>详情</a>
+        <a @click="saveOrUpdate(record)">编辑</a>
         <a-divider type="vertical" />
-        <a>删除</a>
+        <router-link :to="'/detail/role?id=' + record.id">详情</router-link>
         <a-divider type="vertical" />
+        <a-popconfirm title="确认删除？" ok-text="是" cancel-text="否" @confirm="confirm" @cancel="cancel">
+        <a @click="del()">删除</a>
+        </a-popconfirm>
       </span>
     </template>
   </a-table>
+  <a-modal title="角色" v-model:visible="modalVisible" :confirm-loading="modalLoading" @ok="handleModalOk">
+    <a-form :model="roleForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="角色名称">
+        <a-input v-model:value="roleForm.name" />
+      </a-form-item>
+      <a-form-item label="角色类型">
+        <a-input v-model:value="roleForm.type" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, UnwrapRef, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
   import { SearchOutlined } from '@ant-design/icons-vue';
+  import { Tool } from '@/util/tool';
 
   interface FormState {
     name: string;
+    type: string;
   }
 
   const columns = [
@@ -79,8 +94,14 @@
       const pageSize = ref(10);
       const current = ref(1);
 
-      const roleSearchForm: UnwrapRef<FormState> = reactive({
+      const roleSearchForm = ref({
         name: ''
+      });
+
+      const roleForm = ref({
+        id: '',
+        name: '',
+        type: ''
       });
 
       const pagination = {
@@ -91,6 +112,9 @@
         showSizeChanger: true,
         pageSizeOptions: ['10', '20', '50'],
       };
+
+      const modalVisible = ref(false);
+      const modalLoading = ref(false);
 
       const handleFinish = (values: FormState) => {
         console.log(values, roleSearchForm);
@@ -103,18 +127,56 @@
         console.log(current, pageSize);
       };
 
+      const saveOrUpdate = (record?: any) => {
+        modalLoading.value = true;
+        modalVisible.value = true;
+
+        if (record !== undefined) {
+          roleForm.value = Tool.copy(record)
+        } else {
+          roleForm.value = {
+            id: '',
+            name: '',
+            type: ''
+          }
+        }
+
+        modalLoading.value = false;
+      }
+
+      const handleModalOk = () => {
+        modalLoading.value = true;
+        modalVisible.value = false;
+        modalLoading.value = false;
+      }
+
+      const info = () => {
+        console.log('详情')
+      }
+
+      const del = () => {
+        console.log('删除')
+      }
+
       return {
         data,
         columns,
 
         roleSearchForm,
+        roleForm,
         pageSize,
         current,
         pagination,
+        modalVisible,
+        modalLoading,
 
         handleFinish,
         handleFinishFailed,
         onShowSizeChange,
+        saveOrUpdate,
+        handleModalOk,
+        info,
+        del
       };
     },
     components: {

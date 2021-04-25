@@ -13,21 +13,88 @@
         <span>登录</span>
       </a>
     </a-layout-content>
+    <a-modal title="登录" v-model:visible="loginModalVisible" :confirm-loading="loginModalLoading" @ok="login">
+      <a-form :model="loginUser" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+        <a-form-item label="登录名">
+          <a-input v-model:value="loginUser.name"/>
+        </a-form-item>
+        <a-form-item label="密码">
+          <a-input v-model:value="loginUser.password" type="password"/>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </a-layout-header>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import { message } from 'ant-design-vue';
+import store from "@/store";
 
 export default defineComponent({
   name: "the-header",
   setup () {
-    const user = {
-      id: 'a001',
-      name: 'daff'
-    }
+
+    const user = computed(() => store.state.user);
+
+    const loginUser = ref({
+      id: '',
+      name: ''
+    })
+    const loginModalVisible = ref(false);
+    const loginModalLoading = ref(false);
+
+    const showLoginModal = () => {
+      loginModalVisible.value = true;
+    };
+
+    const login = () => {
+      console.log(loginModalVisible)
+      loginModalLoading.value = true;
+
+      const response = {
+        ok: true,
+        data: {
+          id: '001',
+          name: 'daff'
+        },
+        msg: ''
+      }
+
+      loginModalLoading.value = false;
+      if (response.ok) {
+        loginModalVisible.value = false;
+        message.success("登录成功！");
+        store.commit("setUser", response.data);
+        location.reload();
+      } else {
+        message.error(response.msg);
+      }
+    };
+
+    const logout = () => {
+      const response = {
+        ok: true,
+        msg: ''
+      };
+      if (response.ok) {
+        message.success("退出登录成功！");
+        store.commit("setUser", {});
+        location.reload();
+      } else {
+        message.error(response.msg);
+      }
+    };
+
     return {
-      user
+      loginModalVisible,
+      loginModalLoading,
+      loginUser,
+      user,
+
+      login,
+      logout,
+      showLoginModal,
     }
   },
 })

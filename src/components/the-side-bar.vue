@@ -2,10 +2,15 @@
   <a-layout-sider v-model:collapsed="collapsed" collapsible>
     <div class="logo"/>
     <a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
+      <a-menu-item key="uacs" style="background-color: #001529">
+        <span style="font-family: 'Impact',serif; font-weight: bolder; padding-left: 22px; font-size: 36px;">
+          <router-link to="/"><span style="color: #009ad6">UACS</span></router-link>
+        </span>
+      </a-menu-item>
       <a-sub-menu key="sub1">
         <template #title>
             <span>
-              <user-outlined/>
+              <AuditOutlined />
               <span>角色管理</span>
             </span>
         </template>
@@ -16,7 +21,7 @@
       <a-sub-menu key="sub2">
         <template #title>
             <span>
-              <team-outlined/>
+              <VerifiedOutlined />
               <span>权限管理</span>
             </span>
         </template>
@@ -27,7 +32,7 @@
       <a-sub-menu key="sub3">
         <template #title>
             <span>
-              <team-outlined/>
+              <ApartmentOutlined />
               <span>层级管理</span>
             </span>
         </template>
@@ -38,7 +43,7 @@
       <a-sub-menu key="sub4">
         <template #title>
             <span>
-              <team-outlined/>
+              <user-outlined/>
               <span>用户管理</span>
             </span>
         </template>
@@ -52,18 +57,20 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import {TeamOutlined, UserOutlined} from '@ant-design/icons-vue';
+import { VerifiedOutlined, UserOutlined, ApartmentOutlined, AuditOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
   name: "the-side-bar",
   components: {
     UserOutlined,
-    TeamOutlined,
+    ApartmentOutlined,
+    VerifiedOutlined,
+    AuditOutlined
   },
   data() {
     return {
       collapsed: ref<boolean>(false),
-      selectedKeys: ref<string[]>(['1']),
+      selectedKeys: ref<string[]>(['uacs']),
     };
   },
 })

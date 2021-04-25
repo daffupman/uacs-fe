@@ -4,6 +4,7 @@ import Role from '../views/role.vue'
 import Permission from '../views/permission.vue'
 import Hierarchy from '../views/hierarchy.vue'
 import User from '../views/user.vue'
+import RoleDetail from '../views/role-detail.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/user',
     name: 'user',
     component: User
+  },
+  {
+    path: '/detail/role',
+    name: 'roleDetail',
+    component: RoleDetail
   },
   {
     path: '/about',

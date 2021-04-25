@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    【 UNIVERSAL ACCESS CONTROL SYSTEM 】 All right reserved
+    All Right Reserved
   </a-layout-footer>
 </template>
 

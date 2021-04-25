@@ -25,10 +25,11 @@
   <a-table :columns="columns" :data-source="data" class="ant-table-striped" size="middle" :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)" bordered :pagination="pagination">
     <template #action="{ record }">
       <span>
+        <a>编辑</a>
+        <a-divider type="vertical" />
         <a>详情</a>
         <a-divider type="vertical" />
         <a>删除</a>
-        <a-divider type="vertical" />
       </span>
     </template>
   </a-table>
