@@ -14,12 +14,12 @@
       </a>
     </a-layout-content>
     <a-modal title="登录" v-model:visible="loginModalVisible" :confirm-loading="loginModalLoading" @ok="login">
-      <a-form :model="loginUser" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form :model="loginForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
         <a-form-item label="登录名">
-          <a-input v-model:value="loginUser.name"/>
+          <a-input v-model:value="loginForm.account"/>
         </a-form-item>
         <a-form-item label="密码">
-          <a-input v-model:value="loginUser.password" type="password"/>
+          <a-input v-model:value="loginForm.password" type="password"/>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -27,9 +27,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import {defineComponent, ref, computed, reactive} from 'vue';
 import { message } from 'ant-design-vue';
 import store from "@/store";
+import axios from 'axios';
 
 export default defineComponent({
   name: "the-header",
@@ -43,33 +44,32 @@ export default defineComponent({
     })
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
+    const loginForm = reactive({
+      account: '',
+      password: '',
+      type: 'ap'
+    })
 
     const showLoginModal = () => {
       loginModalVisible.value = true;
     };
 
     const login = () => {
-      console.log(loginModalVisible)
       loginModalLoading.value = true;
-
-      const response = {
-        ok: true,
-        data: {
-          id: '001',
-          name: 'daff'
-        },
-        msg: ''
-      }
-
-      loginModalLoading.value = false;
-      if (response.ok) {
-        loginModalVisible.value = false;
-        message.success("登录成功！");
-        store.commit("setUser", response.data);
-        location.reload();
-      } else {
-        message.error(response.msg);
-      }
+      axios.post('http://localhost:20011/uacs/v1/passport/sign-in', loginForm).then(resp => {
+        const data = resp.data;
+        if (data.ok) {
+          store.commit("setUser", {id: data.data.id, name: data.data.name})
+          message.success("登录成功！")
+          loginModalVisible.value = false;
+          location.reload();
+        } else {
+          message.error(data.msg)
+        }
+        loginModalLoading.value = false;
+      }).catch(err => {
+        console.log(err)
+      })
     };
 
     const logout = () => {
@@ -91,6 +91,7 @@ export default defineComponent({
       loginModalLoading,
       loginUser,
       user,
+      loginForm,
 
       login,
       logout,
