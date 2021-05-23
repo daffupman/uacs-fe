@@ -7,7 +7,7 @@
         </a>
       </a-popconfirm>
       <a class="login-menu" v-show="user.id" @click="showLoginModal">
-        <span>欢迎【{{user.name}}】</span>
+        <span>欢迎 [ {{user.name}} ]</span>
       </a>
       <a class="login-menu" v-show="!user.id" @click="showLoginModal">
         <span>登录</span>
@@ -34,7 +34,7 @@ import axios from 'axios';
 
 export default defineComponent({
   name: "the-header",
-  setup () {
+  setup: function () {
 
     const user = computed(() => store.state.user);
 
@@ -60,12 +60,13 @@ export default defineComponent({
         const data = resp.data;
         if (data.ok) {
           store.commit("setUser", {id: data.data.id, name: data.data.name})
+          store.commit('setBearerToken', 'Bearer ' + data.data.accessToken)
           message.success("登录成功！")
-          loginModalVisible.value = false;
           location.reload();
         } else {
           message.error(data.msg)
         }
+        loginModalVisible.value = false;
         loginModalLoading.value = false;
       }).catch(err => {
         console.log(err)
@@ -105,6 +106,6 @@ export default defineComponent({
   .login-menu {
     float: right;
     color: white;
-    padding-left: 10px;
+    padding-left: 20px;
   }
 </style>

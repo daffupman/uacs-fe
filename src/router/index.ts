@@ -15,27 +15,37 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/role',
     name: 'role',
-    component: Role
+    component: () => {
+      return import('../views/role.vue');
+    }
   },
   {
     path: '/permission',
     name: 'permission',
-    component: Permission
+    component: () => {
+      return import('../views/permission.vue');
+    }
   },
   {
     path: '/hierarchy',
     name: 'hierarchy',
-    component: Hierarchy
+    component: () => {
+      return import('../views/hierarchy.vue');
+    }
   },
   {
     path: '/user',
     name: 'user',
-    component: User
+    component: () => {
+      return import('../views/user.vue');
+    }
   },
   {
     path: '/detail/role',
     name: 'roleDetail',
-    component: RoleDetail
+    component: () => {
+      return import('../views/role-detail.vue');
+    }
   },
   {
     path: '/about',
