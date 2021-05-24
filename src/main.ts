@@ -8,11 +8,22 @@ import axios from 'axios'
 
 axios.interceptors.request.use(config => {
     const token = computed(() => store.state.bearerToken)
-    config.headers.common = {
-        ...config.headers.common,
-        authorization: token.value
+    config.headers.authorization = token.value
+    return config
+})
+
+axios.interceptors.response.use(config => {
+    console.log(config)
+    if (config.data.code === 401) {
+        // store.commit('setBearerToken', '')
+        // store.commit("setUser", {})
+        router.replace('/')
     }
     return config
+}, err => {
+    console.log("err")
+    console.log(err)
+    return Promise.reject(err.data.data.msg)
 })
 
 createApp(App).use(store).use(router).use(antd).mount('#app')

@@ -62,11 +62,11 @@ export default defineComponent({
           store.commit("setUser", {id: data.data.id, name: data.data.name})
           store.commit('setBearerToken', 'Bearer ' + data.data.accessToken)
           message.success("登录成功！")
+          loginModalVisible.value = false;
           location.reload();
         } else {
           message.error(data.msg)
         }
-        loginModalVisible.value = false;
         loginModalLoading.value = false;
       }).catch(err => {
         console.log(err)

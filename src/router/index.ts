@@ -1,16 +1,16 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../views/home.vue'
-import Role from '../views/role.vue'
-import Permission from '../views/permission.vue'
-import Hierarchy from '../views/hierarchy.vue'
-import User from '../views/user.vue'
-import RoleDetail from '../views/role-detail.vue'
+import {message} from "ant-design-vue";
+import store from '@/store'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      anon: true
+    }
   },
   {
     path: '/role',
@@ -60,6 +60,15 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.anon || store.state.user) {
+    next()
+  } else {
+    message.warning("请先登录", 3)
+    next('/')
+  }
 })
 
 export default router
