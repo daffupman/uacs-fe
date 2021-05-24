@@ -1,41 +1,51 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../views/home.vue'
-import Role from '../views/role.vue'
-import Permission from '../views/permission.vue'
-import Hierarchy from '../views/hierarchy.vue'
-import User from '../views/user.vue'
-import RoleDetail from '../views/role-detail.vue'
+import {message} from "ant-design-vue";
+import store from '@/store'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      anon: true
+    }
   },
   {
     path: '/role',
     name: 'role',
-    component: Role
+    component: () => {
+      return import('../views/role.vue');
+    }
   },
   {
     path: '/permission',
     name: 'permission',
-    component: Permission
+    component: () => {
+      return import('../views/permission.vue');
+    }
   },
   {
     path: '/hierarchy',
     name: 'hierarchy',
-    component: Hierarchy
+    component: () => {
+      return import('../views/hierarchy.vue');
+    }
   },
   {
     path: '/user',
     name: 'user',
-    component: User
+    component: () => {
+      return import('../views/user.vue');
+    }
   },
   {
     path: '/detail/role',
     name: 'roleDetail',
-    component: RoleDetail
+    component: () => {
+      return import('../views/role-detail.vue');
+    }
   },
   {
     path: '/about',
@@ -50,6 +60,15 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.anon || store.state.user) {
+    next()
+  } else {
+    message.warning("请先登录", 3)
+    next('/')
+  }
 })
 
 export default router
